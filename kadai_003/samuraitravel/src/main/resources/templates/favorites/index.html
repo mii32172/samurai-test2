@@ -64,15 +64,15 @@
 						<ul class="pagination">
 							<li class="page-item">
 								<span th:if="${favoritePage.isFirst()}" class="page-link disabled">前</span>
-								<a th:unless="${favoritePage.isFirst()}" th:href="@{/favorite/favorites(page = ${favoritePage.getNumber() - 1})}" class="page-link samuraitravel-page-link">前</a>
+								<a th:unless="${favoritePage.isFirst()}" th:href="@{/houses/{houseId}/favorites(page = ${favoritePage.getNumber() - 1})}" class="page-link samuraitravel-page-link">前</a>
 							</li>
 							<li th:each="i : ${#numbers.sequence(0, favoritePage.getTotalPages() - 1)}" class="page-item">
 								<span th:if="${i == favoritePage.getNumber()}" class="page-link active samuraitravel-active" th:text="${i + 1}"></span>
-								<a th:unless="${i == favoritePage.getNumber()}" th:href="@{/favorite/favorites(page = ${i})}" class="page-link samuraitravel-page-link" th:text="${i + 1}"></a>
+								<a th:unless="${i == favoritePage.getNumber()}" th:href="@{/houses/{houseId}/favorites(page = ${i})}" class="page-link samuraitravel-page-link" th:text="${i + 1}"></a>
 							</li>
 							<li class="page-item">
 								<span th:if="${favoritePage.isLast()}" class="page-link disabled">次</span>
-								<a th:unless="${favoritePage.isLast()}" th:href="@{/favorite/favorites(page = ${favoritePage.getNumber() + 1})}" class="page-link samuraitravel-page-link">次</a>
+								<a th:unless="${favoritePage.isLast()}" th:href="@{/houses/{houseId}/favorites(page = ${favoritePage.getNumber() + 1})}" class="page-link samuraitravel-page-link">次</a>
 							</li>
 						</ul>
 					</nav>

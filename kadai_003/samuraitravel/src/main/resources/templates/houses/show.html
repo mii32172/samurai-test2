@@ -30,7 +30,7 @@
                              <div sec:authorize="isAuthenticated()" style="position: relative;">
 								<!-- お気に入り追加 -->
 								<div th:if="${notFavoriteExists}">
-									<form method="post" th:action="@{/favorites/add/{houseId}(houseId=${house.id})}" style="position: absolute; top: 0; right: 0;">
+									<form method="post" th:action="@{/houses/{houseId}/favorites/add/{houseId}(houseId=${house.id})}" style="position: absolute; top: 0; right: 0;">
 										<input type="hidden" name="houseId" th:value="*{house.getId()}">
 										<input type="hidden" name="userId" th:value="*{userId}">
 										<button type="submit">&#9825お気に入り追加</button>
@@ -39,7 +39,7 @@
 								
 								<!-- お気に入り解除 -->
 								<div th:unless="${notFavoriteExists}">
-									<form method="post" th:action="@{/favorites/delete/{houseId}(houseId=${house.id})}" style="position: absolute; top: 0; right: 0;">
+									<form method="post" th:action="@{/houses/{houseId}/favorites/delete/{houseId}(houseId=${house.id})}" style="position: absolute; top: 0; right: 0;">
 										<input type="hidden" name="houseId" th:value="*{house.getId()}">
 										<input type="hidden" name="userId" th:value="*{userId}">
 										<button type="submit">&#9829お気に入り解除</button>

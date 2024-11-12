@@ -36,8 +36,8 @@ public class FavoriteController {
 	}
 	
 	 /*お気に入り一覧への遷移*/
-	@GetMapping("/favorites")
-	public String show(Model model, @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Direction.DESC) Pageable pageable, @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
+	@GetMapping
+	public String index(Model model, @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Direction.DESC) Pageable pageable, @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
 	User user = userDetailsImpl.getUser();
 	Page<Favorite> favoritePage = favoriteRepository.findByUser(user, pageable);
 	
@@ -47,14 +47,14 @@ public class FavoriteController {
 	}
 	
 	/*お気に入りの追加*/
-	@PostMapping("/add/{id}")
+	@PostMapping("/add")
 	public String add(@PathVariable(name = "houseId") Integer houseId, @PathVariable(name = "id") Integer id, Model model, @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
 		favoriteService.add(userDetailsImpl, id);
 	return "redirect:/houses/{houseId}"; 	
 	}
 	
 	/*お気に入りの解除*/
-	@PostMapping("/delete/{id}")
+	@PostMapping("/delete")
 	public String delete(@PathVariable(name = "houseId") Integer houseId, @PathVariable(name = "id") Integer id, Model model, @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
 		favoriteRepository.deleteById(id);
 		
