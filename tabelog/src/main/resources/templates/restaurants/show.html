@@ -54,9 +54,9 @@
 									</div>
 
 									<div class="mb-4">
-										<img th:if="${restaurant.getImage()}"
-											th:src="@{/storage/__${restaurant.getImage()}__}" class="w-100" alt="店舗画像">
-										<img th:unless="${restaurant.getImage()}" th:src="@{/images/noImage.png}"
+										<img th:if="${restaurant.getImageName()}"
+											th:src="@{/storage/__${restaurant.getImageName()}__}" class="w-100" alt="店舗画像">
+										<img th:unless="${restaurant.getImageName()}" th:src="@{/images/noImage.png}"
 											class="w-100" alt="NO IMAGE">
 									</div>
 
@@ -87,7 +87,7 @@
 													<span class="fw-bold">説明</span>
 												</div>
 												<div class="col">
-													<span th:text="${restaurant.getRestaurantDescription()}"></span>
+													<span th:text="${restaurant.getDescription()}"></span>
 												</div>
 											</div>
 
@@ -189,7 +189,7 @@
 														class="review-star"></span>
 												</p>
 												<p class="text border-bottom">
-													<h8 class="card-text mb-3" th:text="${review.getDescription()}">
+													<h8 class="card-text mb-3" th:text="${review.getExplanation()}">
 													</h8>
 												</p>
 											</div>
@@ -225,7 +225,7 @@
 									</div>
 									<div class="text-center"
 										th:if="${reviewPage != null and reviewPage.getTotalElements() > 2}">
-										<a th:href="@{/reviews/__${restaurant.getId()}__}">すべてのレビューを見る</a>
+										<a th:href="@{/restaurants/__${restaurant.getId()}__/reviews}">すべてのレビューを見る</a>
 									</div>
 								</div>
 
@@ -249,7 +249,7 @@
 										<div class="card">
 											<div class="card-body">
 												<form method="get"
-													th:action="@{/restaurant/__${restaurant.getId()}__/reservation/input}"
+													th:action="@{/restaurants/__${restaurant.getId()}__/reservation/input}"
 													th:object="${reservationInputForm}">
 													<div class="form-group mb-2">
 														<label for="fromCheckinDateToCheckoutDate"
