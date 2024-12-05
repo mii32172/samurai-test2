@@ -29,12 +29,12 @@
 
 						<div sec:authorize="hasRole('ROLE_PAID')">
 							<div th:if="${notFavorite}">
-								<form method="post" th:action="@{/favorites/add/__${restaurant.getId()}__}">
+								<form method="post" th:action="@{/restaurants/__${restaurant.getId()}__/favorites/add}">
 									<button type="submit">&#9734お気に入り追加</button>
 								</form>
 							</div>
 							<div th:unless="${notFavorite}">
-								<form method="post" th:action="@{/favorites/delete/__${restaurant.getId()}__}">
+								<form method="post" th:action="@{/restaurants/__${restaurant.getId()}__/favorites/delete}">
 									<button type="submit">&#9733お気に入り解除</button>
 								</form>
 							</div>

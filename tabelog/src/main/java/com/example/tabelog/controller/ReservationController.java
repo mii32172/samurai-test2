@@ -88,7 +88,7 @@ public class ReservationController {
          String checkinDate = reservationInputForm.getFromCheckinDateToCheckoutDate();
          Integer numberOfPeople = reservationInputForm.getNumberOfPeople();
   
-         // 宿泊料金を計算する
+         // 料金を計算する
          Integer price = restaurant.getPrice();        
          Integer amount = reservationService.calculateAmount(price, numberOfPeople);
          

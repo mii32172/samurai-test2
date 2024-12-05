@@ -43,15 +43,15 @@
 							<tbody>
 								<tr th:each="reservation : ${reservationPage}">
 									<td>
-										<a th:href="@{/restaurants/__${reservation.getHouse().getId()}__}"
-											th:text="${reservation.getHouse().getName()}"></a>
+										<a th:href="@{/restaurants/__${reservation.getRestaurant().getId()}__}"
+											th:text="${reservation.getRestaurant().getName()}"></a>
 									</td>
 									<td th:text="${reservation.getCheckinDate()}"></td>
 									<td th:text="${reservation.getNumberOfPeople + '名'}"></td>
 									<td th:text="${#numbers.formatInteger(reservation.getAmount(), 1, 'COMMA') + '円'}">
 									</td>
 									<td>
-										<a th:href="@{/reservations/delete/__${reservation.getId()}__}"
+										<a th:href="@{/reservations/__${reservation.getId()}__/delete}"
 											class="btn btn-danger">予約をキャンセルする</a>
 									</td>
 								</tr>

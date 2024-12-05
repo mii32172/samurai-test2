@@ -57,10 +57,10 @@ public class AdminController {
 			restaurantPage = restaurantRepository.findAll(pageable);
 		}
 		
-		model.addAttribute("housePage", restaurantPage);
+		model.addAttribute("restaurantPage", restaurantPage);
 		model.addAttribute("keyword", keyword);
 		
-		return "admin/restaurants/adminRestaurant";
+		return "admin/restaurants/index";
 	}
 	
 	@GetMapping("/restaurants/{id}")
