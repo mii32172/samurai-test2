@@ -153,9 +153,9 @@
 										<p sec:authorize="hasRole('ROLE_FREE')">レビューを投稿するには<a
 												th:href="@{/subsc}">有料会員登録</a>が必要です。</p>
 										<a class="btn text-white shadow-sm samuraitabelog-btn text-right"
-											th:href="@{/reviews/register/__${restaurant.getId()}__}"
+											th:href="@{/restaurants/__${restaurant.getId()}__/reviews/registerform}"
 											sec:authorize="hasRole('ROLE_PAID')"
-											th:if="${userHasReview != null ? !userHasReview : true}">レビューを投稿する</a>
+											th:if="${!userHasReviews}">レビューを投稿する</a>
 										<div class="my-4 text-center"
 											th:if="${reviewPage != null and reviewPage.isEmpty()}">
 											レビューがまだ投稿されていません
@@ -169,9 +169,9 @@
 													th:if="${#authentication.principal.user.id} == ${review.user.id}"
 													sec:authorize="isAuthenticated()">
 													<a class="text-right"
-														th:href="@{/reviews/__${review.getId()}__/edit}">編集
+														th:href="@{/restaurants/__${restaurant.getId()}__/reviews/__${review.getId()}__/edit}">編集
 													</a>
-													<a th:href="@{/reviews/__${review.getId()}__/delete}"
+													<a th:href="@{/restaurants/__${restaurant.getId()}__/reviews/__${review.getId()}__/delete}"
 														class="samuraitabelog-link-danger" data-bs-toggle="modal"
 														th:data-bs-target="${'#deleteReviewModal' + restaurant.getId()}">削除</a>
 												</div>
@@ -211,7 +211,7 @@
 														</div>
 														<div class="modal-footer">
 															<form method="post"
-																th:action="@{/reviews/__${review.getId()}__/delete}">
+																th:action="@{/restaurants/__${restaurant.getId()}__/reviews/__${review.getId()}__/delete}">
 																<button type="button" class="btn btn-secondary"
 																	data-bs-dismiss="modal">キャンセル</button>
 																<button type="submit"
@@ -249,7 +249,7 @@
 										<div class="card">
 											<div class="card-body">
 												<form method="get"
-													th:action="@{/restaurants/__${restaurant.getId()}__/reservation/input}"
+													th:action="@{/restaurants/__${restaurant.getId()}__/reservations/input}"
 													th:object="${reservationInputForm}">
 													<div class="form-group mb-2">
 														<label for="fromCheckinDateToCheckoutDate"

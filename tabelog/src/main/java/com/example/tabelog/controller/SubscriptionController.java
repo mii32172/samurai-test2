@@ -64,6 +64,7 @@ public class SubscriptionController {
 		return "user/withdrawal";
 	}
 
+	//有料会員キャンセル
 	@PostMapping("/cancel-subscription")
 	public String cancelSubscription(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl,
 			RedirectAttributes redirectAttributes) {
@@ -88,6 +89,7 @@ public class SubscriptionController {
 
 	}
 
+	//クレジットカード編集？
 	@GetMapping("/customer/portal")
 	public RedirectView redirectToCustomerPortal(@RequestParam("email") String email,
 			HttpServletRequest httpServletRequest) throws StripeException {
