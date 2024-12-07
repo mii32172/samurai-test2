@@ -62,9 +62,9 @@ public class StripeService {
 								.build())
 				.setMode(SessionCreateParams.Mode.PAYMENT)
 				.setSuccessUrl(
-						requestUrl.replaceAll("/restaurant/[0-9]+/reservation/confirm", "")
+						requestUrl.replaceAll("/restaurants/[0-9]+/reservations/confirm", "")
 								+ "/reservation?reserved?sessionId={CHECKOUT_SESSION_ID}")
-				.setCancelUrl(requestUrl.replace("/reservation/confirm", ""))
+				.setCancelUrl(requestUrl.replace("/reservations/confirm", ""))
 				.setPaymentIntentData(
 						SessionCreateParams.PaymentIntentData.builder()
 								.putMetadata("restaurantId", reservationRegisterForm.getRestaurantId().toString())
@@ -117,6 +117,7 @@ public class StripeService {
 				});
 	}
 
+	//有料会員登録
 	public String createSubscription(User user, HttpServletRequest httpServletRequest) {
 		Stripe.apiKey = stripeApiKey;
 		String requestUrl = new String(httpServletRequest.getRequestURL());
