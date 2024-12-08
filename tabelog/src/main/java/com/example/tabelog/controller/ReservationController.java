@@ -67,7 +67,7 @@ public class ReservationController {
                 
         
         if (bindingResult.hasErrors()) {            
-            model.addAttribute("house", restaurant);            
+            model.addAttribute("restaurant", restaurant);            
             model.addAttribute("errorMessage", "予約内容に不備があります。"); 
             return "restaurants/show";
         }
@@ -131,7 +131,7 @@ public class ReservationController {
  			e.printStackTrace();
  		}
 
- 		return "redirect:/reservation?reserved";
+ 		return "redirect:/reservations?reserved";
  	}
 
      

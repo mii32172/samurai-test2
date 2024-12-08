@@ -63,7 +63,7 @@ public class StripeService {
 				.setMode(SessionCreateParams.Mode.PAYMENT)
 				.setSuccessUrl(
 						requestUrl.replaceAll("/restaurants/[0-9]+/reservations/confirm", "")
-								+ "/reservation?reserved?sessionId={CHECKOUT_SESSION_ID}")
+								+ "/reservations?reserved?sessionId={CHECKOUT_SESSION_ID}")
 				.setCancelUrl(requestUrl.replace("/reservations/confirm", ""))
 				.setPaymentIntentData(
 						SessionCreateParams.PaymentIntentData.builder()
@@ -128,7 +128,7 @@ public class StripeService {
 				.addLineItem(
 						SessionCreateParams.LineItem.builder()
 								.setQuantity(1L)
-								.setPrice("price_1PrWUNIzVhtPxktW0z7zQ0n8") // あなたが作成した価格ID
+								.setPrice("price_1QTYCqHp1iv0LmvpyJJoHPin") // あなたが作成した価格ID
 								.build())
 				.setMode(SessionCreateParams.Mode.SUBSCRIPTION)
 				.setSuccessUrl(requestUrl + "/user/success?session_id={CHECKOUT_SESSION_ID}")
@@ -177,6 +177,7 @@ public class StripeService {
 		}
 	}
 
+	//有料会員退会
 	public void cancelSubscription(String subscriptionId, String email) throws StripeException {
 		Stripe.apiKey = stripeApiKey;
 

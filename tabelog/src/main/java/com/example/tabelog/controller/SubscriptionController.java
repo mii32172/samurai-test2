@@ -31,6 +31,7 @@ public class SubscriptionController {
 		this.roleRepository = roleRepository;
 	}
 
+	//有料会員登録
 	@GetMapping("/subsc")
 	public String subsc(HttpServletRequest httpServletRequest,
 			@AuthenticationPrincipal UserDetailsImpl userDetailsImpl,
@@ -52,6 +53,7 @@ public class SubscriptionController {
 		return "redirect:/user"; // 成功メッセージページにリダイレクト
 	}
 
+	//有料会員登録キャンセル
 	@GetMapping("/user/cancel")
 	public String cancel(RedirectAttributes redirectAttributes) {
 		// キャンセルした場合の処理
@@ -59,12 +61,12 @@ public class SubscriptionController {
 		return "redirect:/user"; // キャンセルページにリダイレクト
 	}
 
+	//有料会員登録退会
 	@GetMapping("/withdrawal")
 	public String withdrawal(Model model) {
 		return "user/withdrawal";
 	}
 
-	//有料会員キャンセル
 	@PostMapping("/cancel-subscription")
 	public String cancelSubscription(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl,
 			RedirectAttributes redirectAttributes) {
@@ -89,7 +91,7 @@ public class SubscriptionController {
 
 	}
 
-	//クレジットカード編集？
+
 	@GetMapping("/customer/portal")
 	public RedirectView redirectToCustomerPortal(@RequestParam("email") String email,
 			HttpServletRequest httpServletRequest) throws StripeException {
