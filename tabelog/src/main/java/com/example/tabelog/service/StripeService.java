@@ -82,7 +82,8 @@ public class StripeService {
 			return "";
 		}
 	}
-
+	
+	//予約削除
 	public void expireCheckoutSession(String sessionId) throws StripeException {
 		Stripe.apiKey = stripeApiKey;
 
@@ -90,11 +91,14 @@ public class StripeService {
 		Session session = Session.retrieve(sessionId);
 		session.expire();
 	}
+	
 
+	//セッションから予約情報を取得しReservationServiceクラスを介してデータべースに登録する
 	public void processSessionCompleted(Event event) {
 		Optional<StripeObject> optionalStripeObject = event.getDataObjectDeserializer().getObject();
 		optionalStripeObject.ifPresentOrElse(stripeObject -> {
 			Session session = (Session) stripeObject;
+			//if文追加
 			if (session.getMode().equals("subscription"))
 				return;
 			SessionRetrieveParams params = SessionRetrieveParams.builder().addExpand("payment_intent").build();

@@ -67,6 +67,7 @@ public class SubscriptionController {
 		return "user/withdrawal";
 	}
 
+	//有料会員を退会する場合はこちらボタンを押したとき
 	@PostMapping("/cancel-subscription")
 	public String cancelSubscription(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl,
 			RedirectAttributes redirectAttributes) {
