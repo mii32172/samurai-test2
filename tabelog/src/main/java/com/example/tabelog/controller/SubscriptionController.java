@@ -39,12 +39,18 @@ public class SubscriptionController {
 		User user = userDetailsImpl.getUser(); // 現在のユーザー情報を取得するメソッド
 
 		// サブスクリプション作成のためのセッションIDを生成
-		String sessionId = stripeService.createSubscription(user, httpServletRequest);
+		String subscriptionId = stripeService.createSubscription(user, httpServletRequest);
+		
+		
+		User dbUser = userRepository.getReferenceById(user.getId());
+		dbUser.setSubscriptionId(subscriptionId);
+		userRepository.save(dbUser);
 
 		// セッションIDをモデルに追加
-		model.addAttribute("sessionId", sessionId);
+		model.addAttribute("subscriptionId", subscriptionId);
 		return "user/subscription";
 	}
+	
 
 	@GetMapping("/subsc/user/success")
 	public String success(@RequestParam("session_id") String sessionId, RedirectAttributes redirectAttributes) {
