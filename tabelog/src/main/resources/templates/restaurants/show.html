@@ -34,7 +34,7 @@
 								</form>
 							</div>
 							<div th:unless="${notFavorite}">
-								<form method="post" th:action="@{/restaurants/__${restaurant.getId()}__/favorites/delete}">
+								<form method="post" th:action="@{/restaurants/__${restaurant.getId()}__/favorites/__${favorite != null ? favorite.getId() : 0}__/delete}">
 									<button type="submit">&#9733お気に入り解除</button>
 								</form>
 							</div>

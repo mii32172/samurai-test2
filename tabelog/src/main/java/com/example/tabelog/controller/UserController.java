@@ -31,7 +31,8 @@ public class UserController {
 	}
 
 	@GetMapping
-	public String index(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl, Model model) {
+	public String index(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl, Model model,RedirectAttributes redirectAttributes) {
+		
 		User user = userRepository.getReferenceById(userDetailsImpl.getUser().getId());
 
 		model.addAttribute("user", user);

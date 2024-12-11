@@ -38,7 +38,7 @@ public class SubscriptionController {
 			Model model) {
 		User user = userDetailsImpl.getUser(); // 現在のユーザー情報を取得するメソッド
 
-		// サブスクリプション作成のためのセッションIDを生成
+		// サブスクリプション作成のためのセッションID(subscriptionID)を生成
 		String subscriptionId = stripeService.createSubscription(user, httpServletRequest);
 		
 		
@@ -99,6 +99,7 @@ public class SubscriptionController {
 	}
 
 
+	//クレジットカード編集？StripeService　createCustomerPortalSessionより
 	@GetMapping("/customer/portal")
 	public RedirectView redirectToCustomerPortal(@RequestParam("email") String email,
 			HttpServletRequest httpServletRequest) throws StripeException {

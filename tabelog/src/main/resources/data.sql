@@ -17,7 +17,7 @@ INSERT IGNORE INTO restaurants (id, category_id, name, image_name, description, 
 INSERT IGNORE INTO restaurants (id, category_id, name, image_name, description, open_time, price,  postal_code, address, phone_number, closing_day) VALUES (8, 4, 'サムライ亭', 'house08.jpg', '最寄り駅から徒歩10分の場所にありいい立地である。',  '11:00-26:00',  '1000-2000',  '450-0008', '名古屋市昭和区X-XX-XX', '012-345-678', '木曜日');
 INSERT IGNORE INTO restaurants (id, category_id, name, image_name, description, open_time, price,  postal_code, address, phone_number, closing_day) VALUES (9, 5, 'SAMURAI屋', 'house09.jpg', '最寄り駅から徒歩10分の場所にありいい立地である。',  '10:00-23:00',  '1000-2000',  '450-0009', '名古屋市瑞穂区X-XX-XX', '012-345-678', '金曜日');
 INSERT IGNORE INTO restaurants (id, category_id, name, image_name, description, open_time, price,  postal_code, address, phone_number, closing_day) VALUES (10, 5, 'サムライ丼', 'house10.jpg', '最寄り駅から徒歩10分の場所にありいい立地である。',  '09:00-22:00',  '1000-2000',  '450-0010', '名古屋市熱田区X-XX-XX', '012-345-678', '土曜日');
-INSERT IGNORE INTO restaurants (id, category_id, name, image_name, description, open_time, price,  postal_code, address, phone_number, closing_day) VALUES (11, 6, '和食侍', 'house11.jpg', '最寄り駅から徒歩10分の場所にありいい立地である。',  '12:00-20:00',  '2000-4000',  '450-0011', '名古屋市名東区X-XX-XX', '012-345-678', '日曜日');
+INSERT IGNORE INTO restaurants (id, category_id, name, image_name, description, open_time, price,  postal_code, address, phone_number, closing_day) VALUES (11, 6, '和食侍', 'e3bbd41a-ee44-4942-bedf-7b2a50c2393a.jpg', '最寄り駅から徒歩10分の場所にありいい立地である。',  '12:00-20:00',  '2000-4000',  '450-0011', '名古屋市名東区X-XX-XX', '012-345-678', '日曜日');
 
 
 -- rolesテーブル

@@ -41,7 +41,7 @@ public class StripeService {
 		this.userService = userService;
 	}
 
-	
+	//予約
 	public String createStripeSession(String restaurantName, ReservationRegisterForm reservationRegisterForm,
 			HttpServletRequest httpServletRequest) {
 		Stripe.apiKey = stripeApiKey;
@@ -150,7 +150,7 @@ public class StripeService {
 	}
 
 	public void processSubscriptionCreated(String subscriptionId, String customerId) throws StripeException {
-		Customer customer = Customer.retrieve(customerId);
+		Customer customer = Customer.retrieve(customerId); //取得する
 		String email = customer.getEmail();
 		User user = userRepository.findByEmail(email);
 
@@ -206,6 +206,7 @@ public class StripeService {
 		}
 	}
 
+	//クレジット編集？
 	public String createCustomerPortalSession(String email, HttpServletRequest httpServletRequest)
 			throws StripeException {
 		Stripe.apiKey = stripeApiKey;
