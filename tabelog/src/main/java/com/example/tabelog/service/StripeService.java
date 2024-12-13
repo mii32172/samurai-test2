@@ -41,7 +41,7 @@ public class StripeService {
 		this.userService = userService;
 	}
 
-	//予約
+	//予約　67 ={CHECKOUT_SESSION_ID}いるか不明
 	public String createStripeSession(String restaurantName, ReservationRegisterForm reservationRegisterForm,
 			HttpServletRequest httpServletRequest) {
 		Stripe.apiKey = stripeApiKey;
@@ -83,25 +83,20 @@ public class StripeService {
 			return "";
 		}
 	}
-	
-	//予約削除
-	public void expireCheckoutSession(String sessionId) throws StripeException {
-		Stripe.apiKey = stripeApiKey;
-
-		// Checkout Sessionの期限を切らす（キャンセルする）
-		Session session = Session.retrieve(sessionId);
-		session.expire();
-	}
-	
 
 	//セッションから予約情報を取得しReservationServiceクラスを介してデータべースに登録する
 	public void processSessionCompleted(Event event) {
 		Optional<StripeObject> optionalStripeObject = event.getDataObjectDeserializer().getObject();
 		optionalStripeObject.ifPresentOrElse(stripeObject -> {
 			Session session = (Session) stripeObject;
-			//if文追加
-			if (session.getMode().equals("subscription"))
+			System.out.println("Received session: " + session.toString());//詳細を表示
+
+			//if文追加いる？
+			if (session.getMode().equals("subscription")) {
+				System.out.println("Session is a subscription, exiting.");//詳細を表示
 				return;
+			}
+
 			SessionRetrieveParams params = SessionRetrieveParams.builder().addExpand("payment_intent").build();
 
 			try {
@@ -120,6 +115,15 @@ public class StripeService {
 					System.out.println("Stripe API Version: " + event.getApiVersion());
 					System.out.println("stripe-java Version: " + Stripe.VERSION);
 				});
+	}
+
+	//予約削除
+	public void expireCheckoutSession(String sessionId) throws StripeException {
+		Stripe.apiKey = stripeApiKey;
+
+		// Checkout Sessionの期限を切らす（キャンセルする）
+		Session session = Session.retrieve(sessionId);
+		session.expire();
 	}
 
 	//有料会員登録
@@ -149,6 +153,7 @@ public class StripeService {
 		}
 	}
 
+	//サブスクリプション生成
 	public void processSubscriptionCreated(String subscriptionId, String customerId) throws StripeException {
 		Customer customer = Customer.retrieve(customerId); //取得する
 		String email = customer.getEmail();
@@ -159,6 +164,7 @@ public class StripeService {
 		userRepository.save(user);
 	}
 
+	//サブスクリプション支払い成功　ロールを有料会員に変更
 	public void processSubscriptionPaymentSucceeded(String subscriptionId, String customerId) throws StripeException {
 		Customer customer = Customer.retrieve(customerId);
 		String email = customer.getEmail();
@@ -182,7 +188,7 @@ public class StripeService {
 		}
 	}
 
-	//有料会員退会
+	//有料会員退会　ロールを無料会員に変更
 	public void cancelSubscription(String subscriptionId, String email) throws StripeException {
 		Stripe.apiKey = stripeApiKey;
 

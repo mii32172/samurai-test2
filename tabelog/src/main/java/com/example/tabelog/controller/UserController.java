@@ -40,6 +40,7 @@ public class UserController {
 		return "user/index";
 	}
 
+	//会員情報編集
 	@GetMapping("/edit")
 	public String edit(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl, Model model) {
 		User user = userRepository.getReferenceById(userDetailsImpl.getUser().getId());
@@ -50,6 +51,7 @@ public class UserController {
 		return "user/edit";
 	}
 
+	//会員情報更新
 	@PostMapping("/update")
 	public String update(@ModelAttribute @Validated UserEditForm userEditForm, BindingResult bindingResult,
 			RedirectAttributes redirectAttributes) {
@@ -69,11 +71,13 @@ public class UserController {
 		return "redirect:/user";
 	}
 
+	//無料会員キャンセル
 	@GetMapping("/membercancel")
 	public String index() {
 		return "user/memberCancel";
 	}
 
+	//無料会員削除
 	@PostMapping("/delete")
 	public String delete(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl,
 			RedirectAttributes redirectAttributes) {

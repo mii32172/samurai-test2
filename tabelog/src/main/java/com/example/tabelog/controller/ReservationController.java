@@ -87,7 +87,8 @@ public class ReservationController {
      {        
          Restaurant restaurant = restaurantRepository.getReferenceById(id);
          User user = userDetailsImpl.getUser(); 
-                 
+          
+         //チェックイン日と人数を取得
          String checkinDate = reservationInputForm.getFromCheckinDateToCheckoutDate();
          Integer numberOfPeople = reservationInputForm.getNumberOfPeople();
   

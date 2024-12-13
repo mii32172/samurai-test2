@@ -25,7 +25,7 @@ public class ReservationService {
 		this.userRepository = userRepository;
 		
 	}
-	
+	//予約
 	@Transactional
 	public void create(Map<String, String> paymentIntentObject) {
 		Reservation reservation = new Reservation();
@@ -37,17 +37,21 @@ public class ReservationService {
 		User user = userRepository.getReferenceById(userId);
 		LocalDate checkinDate = LocalDate.parse(paymentIntentObject.get("checkinDate"));
 		Integer numberOfPeople = Integer.valueOf(paymentIntentObject.get("numberOfPeople"));        
-        Integer amount = Integer.valueOf(paymentIntentObject.get("amount")); 
+        Integer amount = Integer.valueOf(paymentIntentObject.get("amount"));
+        /*
+        //追加場所
         String paymentId = paymentIntentObject.get("paymentId");
 		String sessionId = paymentIntentObject.get("sessionId");
-                
+         */
         reservation.setRestaurant(restaurant);
         reservation.setUser(user);
         reservation.setCheckinDate(checkinDate);
          reservation.setNumberOfPeople(numberOfPeople);
          reservation.setAmount(amount);
-         reservation.setPaymentId(paymentId);
- 		reservation.setSessionId(sessionId);
+         /*
+         reservation.setPaymentId(paymentId); //追加場所
+ 		reservation.setSessionId(sessionId); //追加場所
+ 		*/
 
         
         reservationRepository.save(reservation);

@@ -62,7 +62,6 @@ CREATE TABLE IF NOT EXISTS restaurants (
      amount INT NOT NULL,
      created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
      updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-     payment_id VARCHAR(255),
      session_id VARCHAR(255),
      FOREIGN KEY (restaurant_id) REFERENCES restaurants (id),
      FOREIGN KEY (user_id) REFERENCES users (id)
