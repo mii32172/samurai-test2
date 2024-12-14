@@ -241,10 +241,14 @@ public class StripeService {
 				.setReturnUrl(returnUrl) // ポータルを退出したときのリダイレクト先URL
 				.build();
 
-		com.stripe.model.billingportal.Session session = com.stripe.model.billingportal.Session.create(params);
-
-		// 生成されたポータルURLを返す
-		return session.getUrl();
+		try {
+		    com.stripe.model.billingportal.Session session = com.stripe.model.billingportal.Session.create(params);
+		    return session.getUrl();
+		} catch (StripeException e) {
+		    // エラーの詳細をログに出力
+			System.out.println("Stripe API Error: " + e.getMessage());
+		    throw e; // エラーを再スローして適切な場所でハンドリング
+		}
 	}
 
 	public void processReservationPayment(Event event) {
