@@ -89,7 +89,6 @@ public class StripeService {
 		Optional<StripeObject> optionalStripeObject = event.getDataObjectDeserializer().getObject();
 		optionalStripeObject.ifPresentOrElse(stripeObject -> {
 			Session session = (Session) stripeObject;
-			System.out.println("Received session: " + session.toString());//詳細を表示
 
 			//if文追加いる？
 			if (session.getMode().equals("subscription")) {
