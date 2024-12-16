@@ -36,6 +36,11 @@ public class Restaurant {
 
 	@Column(name = "open_time")
 	private String openTime;
+	
+	/*
+	 @Column(name = "close_time")
+	private LocalTime closeTime;
+	 */
 
 	@Column(name = "price")
 	private Integer price;

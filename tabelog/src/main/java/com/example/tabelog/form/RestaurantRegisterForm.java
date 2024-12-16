@@ -23,8 +23,13 @@ public class RestaurantRegisterForm {
      @NotBlank(message = "説明を入力してください。")
      private String description;   
      
-     @NotBlank(message = "営業時間を入力してください。")
+     @NotBlank(message = "営業時間を入力してください。") //開店？
  	 private String openTime;
+     
+     /*
+      @NotNull(message = "閉店時間を入力してください。")
+	private LocalTime closingTime;
+      */
       
       @NotNull(message = "価格を入力してください。")
      @Min(value = 1, message = "価格は1円以上に設定してください。")

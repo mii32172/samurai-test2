@@ -40,6 +40,10 @@ public class RestaurantService {
          restaurant.setCategory(restaurantRegisterForm.getCategory());
          restaurant.setDescription(restaurantRegisterForm.getDescription());
          restaurant.setOpenTime(restaurantRegisterForm.getOpenTime());
+         /*
+          restaurant.setCloseTime(restaurantRegisterForm.getCloseTime());
+
+          */
          restaurant.setPrice(restaurantRegisterForm.getPrice());
          restaurant.setPostalCode(restaurantRegisterForm.getPostalCode());
          restaurant.setAddress(restaurantRegisterForm.getAddress());
@@ -66,6 +70,9 @@ public class RestaurantService {
 		restaurant.setCategory(restaurantEditForm.getCategory());
 		restaurant.setDescription(restaurantEditForm.getDescription());
 		restaurant.setOpenTime(restaurantEditForm.getOpenTime());
+		/*
+		 *restaurant.setCloseTime(restaurantEditForm.getCloseTime());
+		 */
 		restaurant.setPrice(restaurantEditForm.getPrice());
 		restaurant.setPostalCode(restaurantEditForm.getPostalCode());
 		restaurant.setAddress(restaurantEditForm.getAddress());
@@ -92,6 +99,26 @@ public class RestaurantService {
              Files.copy(imageFile.getInputStream(), filePath);
          } catch (IOException e) {
              e.printStackTrace();
-         }          
+         }  
      } 
+     
+     /* いる？
+      // レストランのIDに基づいてレストランを取得し、開店・閉店時間をフォーマット
+	@Transactional(readOnly = true)
+	public Restaurant getRestaurantWithFormattedTimes(Integer id, Model model) {
+		Restaurant restaurant = restaurantRepository.findById(id)
+				.orElseThrow(() -> new IllegalArgumentException("Invalid restaurant Id:" + id));
+
+		// LocalTimeをフォーマット
+		DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+		String formattedOpeningTime = restaurant.getOpenTime().format(timeFormatter);
+		String formattedClosingTime = restaurant.getCloseTime().format(timeFormatter);
+
+		// フォーマット済みの時間をモデルに追加
+		model.addAttribute("formattedOpeningTime", formattedOpenTime);
+		model.addAttribute("formattedClosingTime", formattedCloseTime);
+
+		return restaurant;
+	}
+      */
  }

@@ -33,6 +33,11 @@ public class Reservation {
 	
 	@Column(name ="checkin_date")
 	private LocalDate checkinDate;
+	
+	/*
+	 @Column(name = "checkin_time")
+	private LocalTime reservationTime; // 予約時間のフィールドを追加
+	 */
 
 	@Column(name ="number_of_people")
 	private Integer numberOfPeople;

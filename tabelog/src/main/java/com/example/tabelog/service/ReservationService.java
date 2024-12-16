@@ -49,28 +49,39 @@ public class ReservationService {
 		Restaurant restaurant = restaurantRepository.getReferenceById(restaurantId);
 		User user = userRepository.getReferenceById(userId);
 		LocalDate checkinDate = parseCheckinDate(paymentIntentObject.get("checkinDate"));
+		/*
+		LocalTime checkinTime = parseCheckinTime(paymentIntentObject.get("checkinTime")); 
+		 */
 		Integer numberOfPeople = Integer.valueOf(paymentIntentObject.get("numberOfPeople"));        
         Integer amount = Integer.valueOf(paymentIntentObject.get("amount"));
+        
         /*
-        //追加場所
-        String paymentId = paymentIntentObject.get("paymentId");
-		String sessionId = paymentIntentObject.get("sessionId");
+         // 営業時間内での予約かを確認
+		if (!isWithinBusinessHours(reservationTime, restaurant.getOpeningTime(), restaurant.getClosingTime())) {
+			throw new IllegalArgumentException("予約時間は営業時間内に設定してください。");
+		}
          */
         reservation.setRestaurant(restaurant);
         reservation.setUser(user);
         reservation.setCheckinDate(checkinDate);
+        /*
+          reservation.setCheckinTime(checkinTime);
+         */
          reservation.setNumberOfPeople(numberOfPeople);
          reservation.setAmount(amount);
-         /*
-         reservation.setPaymentId(paymentId); //追加場所
- 		reservation.setSessionId(sessionId); //追加場所
- 		*/
+        
 
         
         reservationRepository.save(reservation);
     }    
   
-    
+    /*
+     // 営業時間内に予約時間が収まっているかチェック
+	public boolean isWithinBusinessHours(LocalTime ckeckinTime, LocalTime openTime, LocalTime closeTime) {
+		return !checkinTime.isBefore(openTime) && !checkinTime.isAfter(closeTime);
+	}
+     */
+	
     // 価格を計算する
     public Integer calculateAmount(Integer price, Integer numberOfPeople) {
  
