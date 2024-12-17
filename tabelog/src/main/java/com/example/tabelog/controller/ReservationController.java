@@ -1,5 +1,7 @@
 package com.example.tabelog.controller;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
@@ -14,13 +16,17 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.tabelog.entity.Favorite;
 import com.example.tabelog.entity.Reservation;
 import com.example.tabelog.entity.Restaurant;
+import com.example.tabelog.entity.Review;
 import com.example.tabelog.entity.User;
 import com.example.tabelog.form.ReservationInputForm;
 import com.example.tabelog.form.ReservationRegisterForm;
+import com.example.tabelog.repository.FavoriteRepository;
 import com.example.tabelog.repository.ReservationRepository;
 import com.example.tabelog.repository.RestaurantRepository;
+import com.example.tabelog.repository.ReviewRepository;
 import com.example.tabelog.security.UserDetailsImpl;
 import com.example.tabelog.service.ReservationService;
 import com.example.tabelog.service.StripeService;
@@ -35,13 +41,18 @@ public class ReservationController {
 	private final RestaurantRepository restaurantRepository;
 	private final ReservationService reservationService;
 	private final StripeService stripeService;
+	private final ReviewRepository reviewRepository;
+	private final FavoriteRepository favoriteRepository;
 
 	public ReservationController(ReservationRepository reservationRepository, RestaurantRepository restaurantRepository,
-			ReservationService reservationService, StripeService stripeService) {
+			ReservationService reservationService, StripeService stripeService, ReviewRepository reviewRepository,
+			FavoriteRepository favoriteRepository) {
 		this.reservationRepository = reservationRepository;
 		this.restaurantRepository = restaurantRepository;
 		this.reservationService = reservationService;
 		this.stripeService = stripeService;
+		this. reviewRepository=reviewRepository;
+		this.favoriteRepository=favoriteRepository;
 	}
 
 	//予約一覧ページへの遷移
@@ -62,55 +73,61 @@ public class ReservationController {
 	public String input(@PathVariable(name = "id") Integer id,
 			@ModelAttribute @Validated ReservationInputForm reservationInputForm,
 			BindingResult bindingResult,
-			RedirectAttributes redirectAttributes,
-			Model model) {
+			RedirectAttributes redirectAttributes,Model model,
+			Pageable pageable,
+			@AuthenticationPrincipal UserDetailsImpl userDetailsImpl
+			) {
 		Restaurant restaurant = restaurantRepository.getReferenceById(id);
+		Page<Review> reviewPage = reviewRepository.findByRestaurantId(id, pageable);
+		
+		
+		String checkin_date = reservationInputForm.getFromCheckinDateToCheckoutDate();
+		String time = checkin_date.split(" ")[1];
+		
+		String open_time = restaurant.getOpenTime();
+		String open = open_time.split("-")[0];
+		String close = open_time.split("-")[1];
+		
+		if(time.compareTo(open) == -1 || time.compareTo(close) != -1){
 
-		/*
-		 // 予約可能な時間リストを生成してモデルに追加
-		List<LocalTime> availableTimes = getAvailableTimes(restaurant.getOpenTime(), restaurant.getCloseTime());
-		model.addAttribute("availableTimes", availableTimes);
+			if (userDetailsImpl != null) {
+				User user = userDetailsImpl.getUser();
+				List<Review> userHasReviews = reviewRepository.findByUserIdAndRestaurantId(user.getId(), id);
+				boolean notFavoriteExists = !favoriteRepository.favoriteJudge(restaurant, user);
+
+				if (!notFavoriteExists) {
+					Favorite favorite = favoriteRepository.findByRestaurantIdAndUserId(restaurant.getId(), user.getId());
+
+					if (favorite != null) {
+						// 最初のエントリを取得する（重複を排除したい場合）
+						model.addAttribute("favorite", favorite);
+					}
+				}
+				model.addAttribute("notFavoriteExists", notFavoriteExists);
+				model.addAttribute("userHasReviews", !userHasReviews.isEmpty());
+			} else {
+				List<Review> userHasReviews = reviewRepository.findByRestaurantId(id);
+				model.addAttribute("userHasReviews", userHasReviews.isEmpty());
+			}
+			model.addAttribute("reservationInputForm", new ReservationInputForm());
+
+			model.addAttribute("reviewPage", reviewPage);
+
+			
+			model.addAttribute("restaurant", restaurant);
+			
+			model.addAttribute("errorMessage", "予約時間が営業時間外です。");
+			return "restaurants/show";
+			
+		}
+		
+		
 		
 		// 営業時間をビューに渡す
 		model.addAttribute("openTime", restaurant.getOpenTime().toString());
-		model.addAttribute("closeTime", restaurant.getCloseTime().toString());
-		
-		// 営業時間内の予約可能な時間を生成
-			private List<LocalTime> getAvailableTimes(LocalTime openTime, LocalTime closeTime) {
-			List<LocalTime> times = new ArrayList<>();
-			
-			// 営業時間がnullでないか確認
-			if (openTime == null || closeTime == null) {
-			System.out.println("Open or close time is null");
-			return times;
-			}
-			
-			LocalTime time = openTime;
-			while (time.isBefore(closeTime) || time.equals(closeTime)) {
-			times.add(time);
-			time = time.plusHours(1); // 1時間刻みで追加
-			}
-			return times;
-			}
-		
-		 */
+
 
 		if (bindingResult.hasErrors()) {
-			/*
-			 // 予約可能な時間リストを再度モデルに追加
-			List<LocalTime> availableTimes = getAvailableTimes(restaurant.getOpenTime(),
-					restaurant.getCloseTime());
-			model.addAttribute("availableTimes", availableTimes);
-			
-			// その他の必要なデータもモデルに追加
-			model.addAttribute("restaurant", restaurant);
-			model.addAttribute("reservationInputForm", reservationInputForm);
-			
-			// 営業時間もモデルに渡す
-			model.addAttribute("formattedOpenTime", restaurant.getOpenTime());
-			model.addAttribute("formattedCloseTime", restaurant.getCloseTime());
-			
-			 */
 			model.addAttribute("restaurant", restaurant);
 			model.addAttribute("errorMessage", "予約内容に不備があります。");
 			return "restaurants/show";
@@ -133,10 +150,6 @@ public class ReservationController {
 
 		//チェックイン日時と人数を取得
 		String checkinDate = reservationInputForm.getFromCheckinDateToCheckoutDate();
-		
-		/*わからない
-		String checkinTime = reservationInputForm.getcheckinTime();
-		*/
 		Integer numberOfPeople = reservationInputForm.getNumberOfPeople();
 
 		// 料金を計算する

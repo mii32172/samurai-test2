@@ -11,14 +11,9 @@ import lombok.Data;
 
 @Data
 public class ReservationInputForm {
-    @NotBlank(message = "チェックイン日を選択してください。")
+    @NotBlank(message = "チェックイン日時を選択してください。")
     private String fromCheckinDateToCheckoutDate;    
-    
-    /*
-     @NotNull(message = "予約時間を選択してください。")
-	private LocalTime checkinTime; // 予約時間のフィールドを追加
-     */
-    
+ 
     @NotNull(message = "予約人数を入力してください。")
     @Min(value = 1, message = "予約人数は1人以上に設定してください。")
     private Integer numberOfPeople; 

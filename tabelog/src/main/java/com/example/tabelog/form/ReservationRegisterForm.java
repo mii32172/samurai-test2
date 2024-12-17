@@ -12,10 +12,6 @@ public class ReservationRegisterForm {
         
     private String checkinDate;   
     
-    /*
-     private String checkinTime; // 予約時間を追加
-     */
-    
     private Integer numberOfPeople;
     
     private Integer amount; 

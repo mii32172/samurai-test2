@@ -100,20 +100,6 @@ public class RestaurantController {
 
 		Restaurant restaurant = restaurantRepository.getReferenceById(id);
 		Page<Review> reviewPage = reviewRepository.findByRestaurantId(id, pageable);
-		
-		/* いる？
-		// 営業時間のフォーマット
-				DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
-				String formattedOpenTime = restaurant.getOpenTime() != null
-						? restaurant.getOpenTime().format(timeFormatter)
-						: "未定";
-				String formattedCloseTime = restaurant.getCloseTime() != null
-						? restaurant.getCloseTime().format(timeFormatter)
-						: "未定";
-				model.addAttribute("formattedOpenTime", formattedOpenTime);
-				model.addAttribute("formattedCloseTime", formattedCloseTime);
-				
-		*/
 
 
 		if (userDetailsImpl != null) {
