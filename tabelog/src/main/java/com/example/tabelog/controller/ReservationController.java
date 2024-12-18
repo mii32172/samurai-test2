@@ -1,5 +1,8 @@
 package com.example.tabelog.controller;
 
+import java.time.DayOfWeek;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -77,9 +80,57 @@ public class ReservationController {
 			Pageable pageable,
 			@AuthenticationPrincipal UserDetailsImpl userDetailsImpl
 			) {
+		
 		Restaurant restaurant = restaurantRepository.getReferenceById(id);
 		Page<Review> reviewPage = reviewRepository.findByRestaurantId(id, pageable);
 		
+		
+		 // チェックイン日時を解析する
+	    String checkinDateTimeStr = reservationInputForm.getFromCheckinDateToCheckoutDate();
+	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+	    LocalDateTime checkinDateTime;
+	    try {
+	        checkinDateTime = LocalDateTime.parse(checkinDateTimeStr, formatter);
+	    } catch (Exception e) {
+	        model.addAttribute("errorMessage", "予約日時の形式が正しくありません。");
+	        return "restaurants/show";
+	    }
+
+	    // 現在の日時を取得
+	    LocalDateTime now = LocalDateTime.now();
+
+	    // 過去日時かどうかをチェック
+	    if (checkinDateTime.isBefore(now)) {
+	    	
+	    	if (userDetailsImpl != null) {
+				User user = userDetailsImpl.getUser();
+				List<Review> userHasReviews = reviewRepository.findByUserIdAndRestaurantId(user.getId(), id);
+				boolean notFavoriteExists = !favoriteRepository.favoriteJudge(restaurant, user);
+
+				if (!notFavoriteExists) {
+					Favorite favorite = favoriteRepository.findByRestaurantIdAndUserId(restaurant.getId(), user.getId());
+
+					if (favorite != null) {
+						// 最初のエントリを取得する（重複を排除したい場合）
+						model.addAttribute("favorite", favorite);
+					}
+				}
+				model.addAttribute("notFavoriteExists", notFavoriteExists);
+				model.addAttribute("userHasReviews", !userHasReviews.isEmpty());
+			} else {
+				List<Review> userHasReviews = reviewRepository.findByRestaurantId(id);
+				model.addAttribute("userHasReviews", userHasReviews.isEmpty());
+			}
+			model.addAttribute("reservationInputForm", new ReservationInputForm());
+
+			model.addAttribute("reviewPage", reviewPage);
+
+			
+			model.addAttribute("restaurant", restaurant);
+	        model.addAttribute("errorMessage", "過去の日時での予約はできません。");
+	        return "restaurants/show";
+	    }
+	    
 		
 		String checkin_date = reservationInputForm.getFromCheckinDateToCheckoutDate();
 		String time = checkin_date.split(" ")[1];
@@ -120,6 +171,69 @@ public class ReservationController {
 			return "restaurants/show";
 			
 		}
+		
+		String closingDay = restaurant.getClosingDay();
+		LocalDateTime checkinDateTime2 = LocalDateTime.parse(checkinDateTimeStr, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+		DayOfWeek closingDayOfWeek;
+		switch(closingDay) {
+		    case "日曜日":
+		        closingDayOfWeek = DayOfWeek.SUNDAY;
+		        break;
+		    case "月曜日":
+		        closingDayOfWeek = DayOfWeek.MONDAY;
+		        break;
+		    case "火曜日":
+		        closingDayOfWeek = DayOfWeek.TUESDAY;
+		        break;
+		    case "水曜日":
+		        closingDayOfWeek = DayOfWeek.WEDNESDAY;
+		        break;
+		    case "木曜日":
+		        closingDayOfWeek = DayOfWeek.THURSDAY;
+		        break;
+		    case "金曜日":
+		        closingDayOfWeek = DayOfWeek.FRIDAY;
+		        break;
+		    case "土曜日":
+		        closingDayOfWeek = DayOfWeek.SATURDAY;
+		        break;
+		    default:
+		        // 定休日情報が無効な場合の処理
+		        return "restaurants/show";
+		}
+
+		DayOfWeek reservationDayOfWeek = checkinDateTime.getDayOfWeek();
+		if (reservationDayOfWeek == closingDayOfWeek) {
+			if (userDetailsImpl != null) {
+				User user = userDetailsImpl.getUser();
+				List<Review> userHasReviews = reviewRepository.findByUserIdAndRestaurantId(user.getId(), id);
+				boolean notFavoriteExists = !favoriteRepository.favoriteJudge(restaurant, user);
+
+				if (!notFavoriteExists) {
+					Favorite favorite = favoriteRepository.findByRestaurantIdAndUserId(restaurant.getId(), user.getId());
+
+					if (favorite != null) {
+						// 最初のエントリを取得する（重複を排除したい場合）
+						model.addAttribute("favorite", favorite);
+					}
+				}
+				model.addAttribute("notFavoriteExists", notFavoriteExists);
+				model.addAttribute("userHasReviews", !userHasReviews.isEmpty());
+			} else {
+				List<Review> userHasReviews = reviewRepository.findByRestaurantId(id);
+				model.addAttribute("userHasReviews", userHasReviews.isEmpty());
+			}
+			model.addAttribute("reservationInputForm", new ReservationInputForm());
+
+			model.addAttribute("reviewPage", reviewPage);
+
+			
+			model.addAttribute("restaurant", restaurant);
+		    // 定休日の場合のエラーメッセージを設定
+		    model.addAttribute("errorMessage", "定休日に予約はできません。");
+		    return "restaurants/show";
+		}
+
 		
 		
 		
